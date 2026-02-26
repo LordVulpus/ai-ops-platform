@@ -1,0 +1,35 @@
+name: Build and Deploy to AKS
+on:
+ push:
+   branches:
+     - main
+env:
+ ACR_NAME: aiopsregistry15069
+ IMAGE_NAME: aiops-api
+ RESOURCE_GROUP: az-mothershipwest
+ CLUSTER_NAME: aiops-cluster
+jobs:
+ build-and-deploy:
+   runs-on: ubuntu-latest
+   steps:
+   - name: Checkout code
+     uses: actions/checkout@v3
+   - name: Azure Login
+     uses: azure/login@v1
+     with:
+       creds: ${{ secrets.AZURE_CREDENTIALS }}
+   - name: Build Docker image
+     run: |
+       docker build -t $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }} .
+   - name: Login to ACR
+     run: |
+       az acr login --name $ACR_NAME
+   - name: Push image
+     run: |
+       docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
+   - name: Set AKS context
+     run: |
+       az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
+   - name: Deploy to AKS
+     run: |
+       kubectl set image deployment/aiops-app aiops-container=$ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
