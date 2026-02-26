@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aiops-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aiops-app
+  template:
+    metadata:
+      labels:
+        app: aiops-app
+    spec:
+      containers:
+      - name: aiops-container
+        image: aiopsregistry15069.azurecr.io/aiops-api:v1
+        ports:
+        - containerPort: 8000
