@@ -1,0 +1,51 @@
+INFO:     Started server process [4048]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     167.98.217.2:54495 - "GET /docs HTTP/1.1" 200 OK
+INFO:     167.98.217.2:54495 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:root:Received data: {'nomalies': [50], 'count': 1}
+INFO:     167.98.217.2:59547 - "POST /predict HTTP/1.1" 200 OK
+INFO:root:Received data: {'anomalies': [50], 'count': 1}
+INFO:     167.98.217.2:60056 - "POST /predict HTTP/1.1" 200 OK
+INFO:root:Received data: {'anomalies': [50], 'count': 1}
+INFO:     167.98.217.2:57402 - "POST /predict HTTP/1.1" 200 OK
+INFO:root:Received data: {'anomalies': ['50'], 'count': 1}
+INFO:     167.98.217.2:56869 - "POST /predict HTTP/1.1" 200 OK
+INFO:root:Received data: {'anomalies': [50], 'count': 1}
+INFO:     167.98.217.2:57769 - "POST /predict HTTP/1.1" 200 OK
+INFO:root:Received data: {'anomalies': [12], 'count': 1}
+INFO:     167.98.217.2:59568 - "POST /predict HTTP/1.1" 200 OK
+INFO:root:Received data: {'anomalies': [12, 7, 8, 50], 'count': 1}
+INFO:     167.98.217.2:50054 - "POST /predict HTTP/1.1" 200 OK
+INFO:     54.177.248.169:46476 - "GET / HTTP/1.1" 404 Not Found
+INFO:     204.76.203.18:36732 - "GET / HTTP/1.1" 404 Not Found
+INFO:     204.76.203.18:37398 - "GET /bins/ HTTP/1.1" 404 Not Found
+INFO:     204.76.203.18:43660 - "GET /bin/ HTTP/1.1" 404 Not Found
+INFO:     204.76.203.18:45220 - "GET /backup/ HTTP/1.1" 404 Not Found
+INFO:root:Received data: {'anomalies': [50], 'count': 1}
+INFO:     167.98.217.2:64599 - "POST /predict HTTP/1.1" 200 OK
+INFO:root:Received data: {'anomalies': [11, 12, 10, 50], 'count': 1}
+INFO:     167.98.217.2:57234 - "POST /predict HTTP/1.1" 200 OK
+INFO:root:Received data: {'anomalies': [11, 12, 10, 50]}
+INFO:     167.98.217.2:60609 - "POST /predict HTTP/1.1" 200 OK
+INFO:root:Received data: {'values': [11, 12, 10, 50]}
+INFO:     167.98.217.2:52446 - "POST /predict HTTP/1.1" 200 OK
+INFO:root:Received data: {'values': [11, 12, 10, 50]}
+INFO:     167.98.217.2:52446 - "POST /predict HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4048]
+INFO:     Started server process [7742]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     167.98.217.2:65198 - "GET /docs HTTP/1.1" 200 OK
+INFO:     167.98.217.2:65198 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:root:Received data: {'values': [10, 12, 11, 13, 50]}
+INFO:     167.98.217.2:60033 - "POST /predict HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [7742]
