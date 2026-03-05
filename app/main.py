@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 model = IsolationForest(contamination=0.2)
 app = FastAPI()
 Instrumentator().instrument(app).expose(app)
-API_KEY = os.getenv("API_Key")
+API_KEY = os.getenv("API_KEY")
 
 @app.get("/health")
 def health():
