@@ -3,12 +3,13 @@ import os
 import numpy as np
 from fastapi import FastAPI, Header, HTTPException
 from sklearn.ensemble import IsolationForest
-from model import detect_anomaly
-
+from model import detect, detect_anomaly
+from prometheus_fastapi_instrumentator import Instrumentator
 
 logging.basicConfig(level=logging.INFO)
 model = IsolationForest(contamination=0.2)
 app = FastAPI()
+Instrumentator().instrument(app).expose(app)
 API_KEY = os.getenv("API_Key")
 
 @app.get("/health")
