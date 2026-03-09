@@ -5,7 +5,7 @@ from fastapi import FastAPI, Header, HTTPException
 from sklearn.ensemble import IsolationForest
 from model import detect_anomaly
 from prometheus_fastapi_instrumentator import Instrumentator
-from prometheus_client import Counter
+from prometheus_client import Counter, Histogram
 
 logging.basicConfig(level=logging.INFO)
 model = IsolationForest(contamination=0.2)
@@ -16,6 +16,14 @@ API_KEY = os.getenv("API_KEY")
 prediction_counter = Counter(
         "aiops_predictions_total",
         "Total predictions")
+
+anomalies_detected = Counter(
+	"anomalies_detected_total",
+	"Total anomalies detected")
+
+prediction_latency = Histogram(
+	"prediction_latency_seconds",
+	"Time sepnt processing prediction")
 
 @app.get("/health")
 def health():
@@ -40,8 +48,13 @@ def predict(data: dict, x_api_key: str = Header(None)):
 	return {"anomalies": anomalies}
 
 def detect(values):
-	X = np.array(values).reshape(-1, 1)
-	preds = model.fit_predict(X)
-	anomalies = [v for v, p in zip(values, preds) if p == -1]
-	return anomalies
+
+	if not values:
+		return []
+
+	with prediction_latency.time():
+		X = np.array(values).reshape(-1, 1)
+		preds = model.fit_predict(X)
+		anomalies = [v for v, p in zip(values, preds) if p == -1]
+		return anomalies
 
