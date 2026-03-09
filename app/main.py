@@ -5,12 +5,17 @@ from fastapi import FastAPI, Header, HTTPException
 from sklearn.ensemble import IsolationForest
 from model import detect_anomaly
 from prometheus_fastapi_instrumentator import Instrumentator
+from prometheus_client import Counter
 
 logging.basicConfig(level=logging.INFO)
 model = IsolationForest(contamination=0.2)
 app = FastAPI()
 Instrumentator().instrument(app).expose(app)
 API_KEY = os.getenv("API_KEY")
+
+prediction_counter = Counter(
+        "aiops_predictions_total",
+        "Total predictions")
 
 @app.get("/health")
 def health():
@@ -22,6 +27,7 @@ def predict(data: dict, x_api_key: str = Header(None)):
 	if x_api_key != API_KEY:
 		raise HTTPException(status_code=403, detail="Forbidden")
 
+	prediction_counter.inc()
 	logging.info(f"Received data: {data}")
 	values = data.get("values", [])
 
@@ -38,3 +44,4 @@ def detect(values):
 	preds = model.fit_predict(X)
 	anomalies = [v for v, p in zip(values, preds) if p == -1]
 	return anomalies
+
