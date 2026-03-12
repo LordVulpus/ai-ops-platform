@@ -1,6 +1,7 @@
 import json
 import random
 import time
+import os
 from azure.eventhub import EventHubProducerClient, EventData
 CONNECTION_STR = os.getenv("EVENTHUB_CONNECTION_STR")
 EVENTHUB_NAME = "telemetry-hub"
