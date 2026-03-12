@@ -5,3 +5,4 @@ prometheus_client==0.24.1
 scikit-learn==1.7.2
 uvicorn==0.41.0
 azure-eventhub
+urllib3

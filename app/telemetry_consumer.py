@@ -35,3 +35,4 @@ with client:
    client.receive(
        on_event=on_event,
        starting_position="-1"
+)
