@@ -23,3 +23,8 @@ spec:
               secretKeyRef:
                 name: api-secret
                 key: API_Key
+          - name: EVENTHUB_CONNECTION_STR
+            valueFrom:
+              secretKeyRef:
+                name: eventhub-secret
+                key: CONNECTION_STR
