@@ -14,9 +14,7 @@ logger = logging.getLogger(__name__)
 model = IsolationForest(contamination=0.2)
 app = FastAPI()
 
-@app.on_event("startup")
-async def expose_metrics():
-    Instrumentator().instrument(app).expose(app)
+Instrumentator().instrument(app).expose(app)
 
 # Environment Variables
 API_KEY = os.getenv("API_KEY")
