@@ -14,8 +14,9 @@ logger = logging.getLogger(__name__)
 model = IsolationForest(contamination=0.2)
 app = FastAPI()
 
-#Instrument FastAPI for Prometheus
-Instrumentator().instrument(app).expose(app)
+@app.on_event("startup")
+async def expose_metrics():
+	Instrumentator().instrument(app).expose(app)
 
 #Environment Variables
 API_KEY = os.getenv("API_KEY")
@@ -38,7 +39,7 @@ def health():
     return {"status": "ok"}
 
 @app.post("/predict")
-def predict(data: dict, x_api_key: str = Header(None)):
+async def predict(data: dict, x_api_key: str = Header(None)):
 	# Check Security
 	if not API_KEY or x_api_key != API_KEY:
 		logger.warning("Unauthorized access attempt.")
@@ -64,7 +65,8 @@ def predict(data: dict, x_api_key: str = Header(None)):
 			"status": "success",
 			"data_points_processed": len(values),
 			"anomalies_found": len(anomalies),
-			"anomalies": anomalies
+			"anomalies": anomalies,
+			"prediction": "success"
 			}
 	except Exception as e:
 		logger.error(f"ML Model Error: {str(e)}")
