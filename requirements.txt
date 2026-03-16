@@ -1,5 +1,7 @@
 fastapi
 numpy
+pandas
+prophet
 prometheus-fastapi-instrumentator==7.1.0
 prometheus_client==0.24.1
 scikit-learn==1.7.2
