@@ -51,7 +51,7 @@ cpu_forecast = Gauge(
 
 prediction_error = Gauge(
    "aiops_prediction_error",
-   "Difference between predicted and actual values"
+   "Difference between predicted and actual values")
 
 @app.get("/health")
 def health():
@@ -92,20 +92,20 @@ async def predict(data: dict, x_api_key: str = Header(None)):
         if anomalies:
             anomalies_detected.inc(len(anomalies))
 
-    telemetry_history.append({
-    "timestamp": time.time(),
-    "cpu": values[0]})
+        telemetry_history.append({
+        "timestamp": time.time(),
+        "cpu": values[0]})
 
-    if len(telemetry_history) > 1000:
-        telemetry_history.pop(0)
+        if len(telemetry_history) > 1000:
+            telemetry_history.pop(0)
 
         return {
             "status": "success",
             "data_points_processed": len(values),
             "anomalies_found": len(anomalies),
             "anomalies": anomalies,
-            "prediction": "success"
-        }
+            "prediction": "success"}
+
     except Exception as e:
         logger.error(f"ML Model Error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal ML processing error")
@@ -119,8 +119,8 @@ def detect(values):
         X_train = np.array(historical_values).reshape(-1, 1)
 
         # 3. Fit model on HISTORY
-    if len(historical_values) > 20:
-	 model.fit(X_train)
+        if len(historical_values) > 20:
+	    model.fit(X_train)
 
         # 4. Predict on NEW values
         X_test = np.array(values).reshape(-1, 1)
