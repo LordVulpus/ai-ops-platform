@@ -32,3 +32,8 @@ spec:
               secretKeyRef:
                 name: eventhub-secret
                 key: CONNECTION_STR
+          - name: BLOB_CONNECTION_STRING
+            valueFrom:
+              secretKeyRef:
+                name: azure-storage-secret
+                key: AZURE_STORAGE_CONNECTION_STRING

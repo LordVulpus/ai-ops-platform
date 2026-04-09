@@ -9,3 +9,4 @@ scikit-learn==1.8.0
 uvicorn==0.42.0
 azure-eventhub
 urllib3
+azure-storage-blob
