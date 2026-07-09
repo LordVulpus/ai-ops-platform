@@ -1,0 +1,7 @@
+{
+	"/subscriptions/c2c2dd70-d73d-413c-8083-87a6e41b02e8/resourceGroups/az-mothershipwest/providers/Microsoft.Network/VirtualNetworks/az-centralcomputerVNET": {
+		"resource_id": "/subscriptions/c2c2dd70-d73d-413c-8083-87a6e41b02e8/resourceGroups/az-mothershipwest/providers/Microsoft.Network/virtualNetworks/az-centralcomputerVNET",
+		"resource_type": "azurerm_virtual_network",
+		"resource_name": "res-0"
+	}
+}

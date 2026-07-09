@@ -1,0 +1,7 @@
+{
+	"/subscriptions/c2c2dd70-d73d-413c-8083-87a6e41b02e8/resourceGroups/az-mothershipwest/providers/Microsoft.ContainerService/managedClusters/aiops-cluster": {
+		"resource_id": "/subscriptions/c2c2dd70-d73d-413c-8083-87a6e41b02e8/resourceGroups/az-mothershipwest/providers/Microsoft.ContainerService/managedClusters/aiops-cluster",
+		"resource_type": "azurerm_kubernetes_cluster",
+		"resource_name": "res-0"
+	}
+}

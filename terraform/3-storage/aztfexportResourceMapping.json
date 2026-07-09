@@ -1,0 +1,7 @@
+{
+	"/subscriptions/c2c2dd70-d73d-413c-8083-87a6e41b02e8/resourceGroups/az-mothershipwest/providers/Microsoft.Storage/storageAccounts/jfaiopsblob": {
+		"resource_id": "/subscriptions/c2c2dd70-d73d-413c-8083-87a6e41b02e8/resourceGroups/az-mothershipwest/providers/Microsoft.Storage/storageAccounts/jfaiopsblob",
+		"resource_type": "azurerm_storage_account",
+		"resource_name": "res-0"
+	}
+}
