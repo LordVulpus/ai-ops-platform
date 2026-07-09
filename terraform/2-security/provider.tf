@@ -1,3 +1,19 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source = "hashicorp/azurerm"
+    }
+  }
+
+  backend "azurerm" {
+    resource_group_name  = "az-mothershipwest"
+    storage_account_name = "jfaiopsblob" # Change to your actual storage account name
+    container_name       = "tfstate"                   # The blob container name
+    key                  = "security.terraform.tfstate"
+  }
+}
+
+
 provider "azurerm" {
   features {
   }
