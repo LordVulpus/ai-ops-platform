@@ -18,7 +18,6 @@ resource "azurerm_linux_virtual_machine" "res-0" {
   location              = "ukwest"
   name                  = "az-centralcomputer"
   network_interface_ids = ["/subscriptions/c2c2dd70-d73d-413c-8083-87a6e41b02e8/resourceGroups/az-mothershipwest/providers/Microsoft.Network/networkInterfaces/az-centralcomputerVMNic"]
-  os_managed_disk_id    = "/subscriptions/c2c2dd70-d73d-413c-8083-87a6e41b02e8/resourceGroups/AZ-MOTHERSHIPWEST/providers/Microsoft.Compute/disks/az-centralcomputer_OsDisk_1_79063d40f3c74189ae0fc3f798ba7287"
   resource_group_name   = "az-mothershipwest"
   secure_boot_enabled   = true
   size                  = "Standard_B2ats_v2"
