@@ -1,35 +1,86 @@
 name: Build and Deploy to AKS
+
 on:
  push:
    branches:
      - main
+
 env:
  ACR_NAME: aiopsregistry15069
  IMAGE_NAME: aiops-api
  RESOURCE_GROUP: az-mothershipwest
  CLUSTER_NAME: aiops-cluster
+
 jobs:
- build-and-deploy:
-   runs-on: ubuntu-latest
+ # JOB 1: Provision and update all infrastructure layers
+ terraform-infrastructure:
+   name: "Execute Private Infrastructure Deployment"
+   runs-on: self-hosted  # <--- CRITICAL: Runs inside your Azure private VNet Jumpbox
    steps:
-   - name: Checkout code
-     uses: actions/checkout@v3
-   - name: Azure Login
-     uses: azure/login@v1
-     with:
-       creds: ${{ secrets.AZURE_CREDENTIALS }}
-   - name: Build Docker image
-     run: |
-       docker build -t $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }} .
-   - name: Login to ACR
-     run: |
-       az acr login --name $ACR_NAME
-   - name: Push image
-     run: |
-       docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
-   - name: Set AKS context
-     run: |
-       az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
-   - name: Deploy to AKS
-     run: |
-       kubectl set image deployment/aiops-app aiops-container=$ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
+     - name: Checkout code
+       uses: actions/checkout@v4
+
+     - name: Apply Network Layer
+       run: |
+         cd terraform/1-networking
+         terraform init -input=false
+         terraform apply -auto-approve -input=false
+
+     - name: Apply Security Layer
+       run: |
+         cd terraform/2-security
+         terraform init -input=false
+         terraform apply -auto-approve -input=false
+
+     - name: Apply Storage Layer
+       run: |
+         cd terraform/3-storage
+         terraform init -input=false
+         terraform apply -auto-approve -input=false
+
+     - name: Apply VM Compute Layer
+       run: |
+         cd terraform/4-compute
+         terraform init -input=false
+         terraform apply -auto-approve -input=false
+
+     - name: Apply AKS Kubernetes Cluster Layer
+       run: |
+         cd terraform/4-compute/aks-cluster
+         terraform init -input=false
+         terraform apply -auto-approve -input=false
+
+ # JOB 2: Build container and release app code (Your original logic)
+ build-and-deploy:
+   name: "Build and Deploy App Container"
+   needs: terraform-infrastructure  # <--- CRITICAL: Ensures infra finishes 100% first
+   runs-on: self-hosted  # Changed to self-hosted so it also builds securely inside your VNet
+   steps:
+     - name: Checkout code
+       uses: actions/checkout@v4
+
+     - name: Azure Login
+       uses: azure/login@v2
+       with:
+         creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+     - name: Build Docker image
+       run: |
+         docker build -t $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }} .
+
+     - name: Login to ACR
+       run: |
+         az acr login --name $ACR_NAME
+
+     - name: Push image
+       run: |
+         docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
+
+     - name: Set AKS context
+       run: |
+         az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
+
+     - name: Deploy to AKS
+       run: |
+         kubectl set image deployment/aiops-app aiops-container=$ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
+

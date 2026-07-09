@@ -1,17 +1,30 @@
-groups:
-- name: aiops-alerts
- rules:
- - alert: HighAnomalyRate
-   expr: increase(anomalies_detected_total[5m]) > 10
-   for: 2m
-   labels:
-     severity: warning
-   annotations:
-     summary: "High anomaly rate detected"
- - alert: HighPredictionLatency
-   expr: histogram_quantile(0.95, rate(prediction_latency_seconds_bucket[5m])) > 1
-   for: 5m
-   labels:
-     severity: critical
-   annotations:
-     summary: "ML prediction latency too high"
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-alerts-conf
+  namespace: default # Ensure this matches your Prometheus namespace
+data:
+  alerts.yaml: |
+    groups:
+    - name: aiops-alerts
+      rules:
+        - alert: HighAnomalyRate
+          expr: increase(anomalies_detected_total[5m]) > 10
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High anomaly rate detected"
+        - alert: HighPredictionLatency
+          expr: histogram_quantile(0.95, rate(prediction_latency_seconds_bucket[5m])) > 1
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "ML prediction latency too high"
+        - alert: ModelDriftHigh
+          expr: aiops_model_drift_score > 0.5
+          for: 5m
+          annotations:
+            summary: "High Model Drift Detected"
+            description: "The rolling average drift score is {{ $value }}, indicating the ML model may need retraining."

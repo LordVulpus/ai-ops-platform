@@ -20,7 +20,10 @@ telemetry_upload_buffer = []
 #Initialise Blob client only if connection string exists
 blob_service = None
 if BLOB_CONN_STR:
-    blob_service = BlobServiceClient.from_connection_string(BLOB_CONN_STR)
+    try:
+        blob_service = BlobServiceClient.from_connection_string(BLOB_CONN_STR)
+    except Exception as e:
+        logger.error(f"Failed to initialize Azure Blob Service: {e}")
 
 # Add telemetry history
 telemetry_history = []
@@ -45,10 +48,13 @@ forecast_requests_total = Counter("aiops_forecast_requests_total", "Total foreca
 forecast_latency_seconds = Histogram("aiops_forecast_latency_seconds", "Forecast latency")
 cpu_forecast = Gauge("aiops_cpu_forecast", "Predicted CPU value")
 prediction_error = Gauge("aiops_prediction_error", "Difference between predicted and actual values")
+model_drift_score = Gauge("aiops_model_drift_score", "Rolling average model drift indicator")
+
+recent_drift = []
 
 def upload_to_azure(buffer_data):
     """Handles the actual batch upload to Azure"""
-    if not blob_service
+    if not blob_service:
         logger.error("Azure Blob Service not initialized. Check connection string.")
         return
     try:
@@ -111,6 +117,15 @@ async def predict(data: dict, x_api_key: str = Header(None, alias="x-api-key")):
         if predicted_val != 0: # Ensure we actually have a prediction to compare against
             error = abs(current_actual - predicted_val)
             prediction_error.set(error)
+
+        current_drift = len(anomalies) / len(values) if values else 0
+
+        recent_drift.append(current_drift)
+        if len(recent_drift) > 50:
+            recent_drift.pop(0)
+
+        avg_drift = sum(recent_drift) / len(recent_drift)
+        model_drift_score.set(avg_drift)
 
         telemetry_entry = {
             "timestamp": time.time(),
