@@ -76,11 +76,30 @@ jobs:
        run: |
          docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
 
-     - name: Set AKS context
+     - name: Set AKS context & Check Power State
        run: |
-         az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
+         # 1. Grab credentials normally
+         az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME --overwrite-existing
+
+         # 2. Query Azure to see if the cluster is currently stopped
+         CLUSTER_STATE=$(az aks show --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME --query "powerState.code" -o tsv)
+         echo "Current cluster state is: $CLUSTER_STATE"
+
+         # 3. If it's stopped, wake it up automatically so we can deploy to it
+         if [ "$CLUSTER_STATE" = "Stopped" ]; then
+           echo " Cluster is offline! Waking it up to receive updates..."
+           az aks start --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
+           echo "Waiting 30 seconds for DNS records to propagate..."
+           sleep 30
+         fi
 
      - name: Deploy to AKS
        run: |
+         # Execute your image updates now that the control plane is awake
          kubectl set image deployment/aiops-app aiops-container=$ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
 
+     # OPTIONAL: Turn it back off immediately after deployment to save costs!
+     - name: Power Down Cluster (Cost Savings)
+       run: |
+         echo " Application deployment complete. Powering down AKS to save money..."
+         az aks stop --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
