@@ -10,20 +10,34 @@ from sklearn.ensemble import IsolationForest
 from prometheus_fastapi_instrumentator import Instrumentator
 from prometheus_client import Counter, Histogram, Gauge
 from azure.storage.blob import BlobServiceClient
+from azure.identity import DefaultAzureCredential
 
 #Azure Storage Config
-BLOB_CONN_STR = os.getenv("BLOB_CONNECTION_STRING")
-CONTAINER_NAME = "jfblob1"
+STORAGE_ACCOUNT_URL = "https://windows.net"
+CONTAINER_NAME = "jfaiopsblob"
 BUFFER_THRESHOLD = 50
 telemetry_upload_buffer = []
 
 #Initialise Blob client only if connection string exists
-blob_service = None
-if BLOB_CONN_STR:
-    try:
-        blob_service = BlobServiceClient.from_connection_string(BLOB_CONN_STR)
-    except Exception as e:
-        logger.error(f"Failed to initialize Azure Blob Service: {e}")
+
+from azure.storage.blob import BlobServiceClient
+from azure.identity import DefaultAzureCredential # Added for Managed Identity
+
+#Azure Storage Config
+STORAGE_ACCOUNT_URL = "https://windows.net" # Points directly to your storage account endpoint
+CONTAINER_NAME = "jfaiopsblob"                                   # Swapped to match your true Azure resource name
+BUFFER_THRESHOLD = 50
+telemetry_upload_buffer = []
+
+# Initialise Blob client seamlessly using Managed Identity
+
+try:
+    credential = DefaultAzureCredential()
+    blob_service = BlobServiceClient(account_url=STORAGE_ACCOUNT_URL, credential=credential)
+    logger.info("Successfully initialized Azure Blob Service via DefaultAzureCredential")
+except Exception as e:
+    blob_service = None
+    logger.error(f"Failed to initialize Azure Blob Service with Managed Identity: {e}")
 
 # Add telemetry history
 telemetry_history = []
