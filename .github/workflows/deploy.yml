@@ -43,13 +43,13 @@ jobs:
        run: |
          cd terraform/4-compute
          terraform init -input=false
-         terraform apply -auto-approve -input=false
+         terraform plan -auto-approve -input=false
 
      - name: Apply AKS Kubernetes Cluster Layer
        run: |
          cd terraform/4-compute/aks-cluster
          terraform init -input=false
-         terraform apply -auto-approve -input=false
+         terraform plan -auto-approve -input=false
 
  # JOB 2: Build container and release app code (Your original logic)
  build-and-deploy:
