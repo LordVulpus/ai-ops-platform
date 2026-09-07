@@ -1,8 +1,13 @@
-resource "azurerm_kubernetes_cluster" "res-0" {
+resource "azurerm_resource_group" "rg" {
+  name     = "az-mothershipwest"
+  location = var.location
+}
+
+resource "azurerm_kubernetes_cluster" "aks" {
   dns_prefix          = "aiops-clus-az-mothershipwes-c2c2dd"
-  location            = "ukwest"
+  location            = var.location
   name                = "aiops-cluster"
-  resource_group_name = "az-mothershipwest"
+  resource_group_name = azurerm_resource_group.rg.name
   default_node_pool {
     name = "nodepool1"
     upgrade_settings {
@@ -15,7 +20,7 @@ resource "azurerm_kubernetes_cluster" "res-0" {
   linux_profile {
     admin_username = "azureuser"
     ssh_key {
-      key_data = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQChfo9De6CQzC8h4SBZgqAqJI0EicZ0T2rXpmZDIz2jStRwGf4o5/aLTTn4VgiYyWCEURVZ7ddQr5x4i+BGRgHEVtwxcLI3wcd0QYorExVEaC+zkF3WtKxDuPxXL0c+ZuxlnwZg0suc5v9l3uvOGEiAaeiaKNnklTdmKSrMj+g3z1WPEUEk+f70EyX4IVaP3sSFCpBWQt3PO2557iykQUtT0bvUenqvKeMY2gASX+AiCBIA2xPRamTIcbvhhZfFChckKpJFUzQdewyGQoiUDUNyZE+ST2anRLLj0zT+NWLXOITOmZ6Ior1CQSuKj0fr9Gthqw9Aja+zayi6ABs4YXDH"
+      key_data = var.ssh_public_key
     }
   }
   monitor_metrics {
