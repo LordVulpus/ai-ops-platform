@@ -1,6 +1,6 @@
 # Cloud-Native Azure AIOps & ML Telemetry Platform
 
-An enterprise-grade Azure infrastructure and containerized AIOps platform built using Infrastructure as Code (Terraform), Kubernetes (AKS), and GitHub Actions. Features a Python-based ML microservice performing real-time request anomaly detection and predictive time-series load forecasting using passwordless Azure Managed Identity authentication.
+An enterprise-grade Azure infrastructure and containerized AIOps platform built using Infrastructure as Code (Terraform), Kubernetes (AKS), and GitHub Actions. Features a Python-based ML microservice performing real-time request anomaly detection using passwordless Azure Managed Identity authentication.
 
 ---
 
@@ -52,7 +52,7 @@ graph TD
 
 ## AI-Assisted Engineering & Critical Verification
 
-    While generative AI was used to accelerate initial architecture drafting and code prototyping, relying on AI outputs required active verification, technical research, and manual troubleshooting:
+    While generative AI was used to accelerate initial architecture drafting and code prototyping, relying on AI outputs required active verification, technical research, and manual troubleshooting.
 
     Security Overrides: Corrected insecure AI recommendations that suggested hardcoding secrets directly into main.py and environment files, overriding them with zero-trust passwordless Azure Workload Identities (azure-identity).
 
@@ -98,4 +98,4 @@ graph TD
 
     [ ] Policy as Code & Governance: Implement Azure Policy / OPA rules to enforce network isolation and security compliance automatically.
 
-    [ ] Automated Jumpbox Provisioning: Codify Jumpbox toolbelt bootstrap scripts (Ansible/Cloud-init) to enable 100% automated VM regeneration.
+    [ ] Automated Jumpbox Provisioning: Codify Jumpbox toolbelt bootstrap scripts to enable 100% automated VM regeneration.
