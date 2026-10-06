@@ -7,3 +7,4 @@ __pycache__/
 *.tfstate.backup
 nohup.out
 *.tfvars
+**/nohup.out
