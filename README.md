@@ -36,7 +36,7 @@ graph TD
 
     Networking: Single Virtual Network (VNet) hosting AKS cluster and Linux Jumpbox VM (Transition to enterprise Hub-and-Spoke VNet Peering in progress).
 
-    Infrastructure as Code: 100% parameterized, layered Terraform directory architecture (1-networking, 2-security, 3-storage, 4-compute).
+    Infrastructure as Code: Fully parameterized, layered Terraform directory architecture (1-networking, 2-security, 3-storage, 4-compute (and AKS subdirectory)).
 
     Container Orchestration: Azure Kubernetes Service (aiops-cluster) & Azure Container Registry (aiopsregistry15069).
 
@@ -52,21 +52,21 @@ graph TD
 
 ## AI-Assisted Engineering & Critical Verification
 
-    While generative AI was used to accelerate initial architecture drafting and code prototyping, relying on AI outputs required active verification, technical research, and manual troubleshooting.
+    Generative AI was used to draft initial architecture and code prototyping, however needed active verification, technical research, and manual troubleshooting to cross reference with AI.
 
     Security Overrides: Corrected insecure AI recommendations that suggested hardcoding secrets directly into main.py and environment files, overriding them with zero-trust passwordless Azure Workload Identities (azure-identity).
 
-    Debugging AI Hallucinations: Resolved contradictory guidance around Kubernetes manifest parameters, Terraform state bindings, and broken syntax in Mermaid diagrams.
+    Debugging AI Hallucinations: Resolved contradictory guidance around Kubernetes parameters, Terraform state bindings, and broken python syntax.
 
-    Hands-on Problem Solving: Independently diagnosed Kubernetes CrashLoopBackOff states, fixed Prometheus scraper target misconfigurations, and re-architected pipeline safety controls when CI runners attempted self-destruction.
+    Hands-on Problem Solving: Independently diagnosed Kubernetes CrashLoopBackOff states, fixed Prometheus scraper target misconfigurations, and adjusted pipeline safety controls when CI runners attempted self-destruction.
 
 ## Key Technical Highlights & Engineering Journey
 
-    Passwordless Workload Identity: Completely eliminated hardcoded connection strings and long-lived API tokens across Python microservices (main.py, telemetry_producer.py, telemetry_consumer.py) in favor of DefaultAzureCredential bound to Azure RBAC roles.
+    Passwordless Workload Identity: Completely eliminated hardcoded connection strings and long-lived API tokens across Python microservices (main.py, telemetry_producer.py, telemetry_consumer.py) in favour of DefaultAzureCredential bound to Azure RBAC roles.
 
     Predictive AI/ML Telemetry Engine: Deployed real-time anomaly detection (IsolationForest) and predictive time-series forecasting (Prophet) directly on Kubernetes to anticipate infrastructure bottlenecks.
 
-    Fully Parameterized Layered IaC: Modularized Terraform configurations into strict sequence-based layers (1-networking to 4-compute) using a global variables.tf pattern for clean state separation and zero-drift deployments.
+    Fully Parameterised Layered IaC: Modularised Terraform configurations into strict sequence-based layers (1-networking to 4-compute) using a global variables.tf pattern for clean state separation and zero-drift deployments.
 
     Resilient Kubernetes Operations: Diagnosed and resolved container runtime challenges (including CrashLoopBackOff states, pod logs inspection, and Prometheus metric scraping endpoints).
 
@@ -80,22 +80,24 @@ graph TD
 
     Read-Only Pipeline Guardrails: Implemented a pipeline safety gate ensuring compute and cluster modifications require explicit terraform plan approval before apply execution.
 
+    Cost Saving: Took down Grafana Dashboard and Telemetry Hub due to high costs but planning to reinstate cost efficient monitoring in next steps.
+
 ## Tech Stack
 
     Azure | Terraform | Kubernetes (AKS) | Docker | Python (FastAPI) | Scikit-learn | GitHub Actions | Prometheus | Grafana | Azure Blob Storage
 
 ## Implementation Status & Roadmap
 
-    [x] Layered IaC Parameterization: 100% parameterized Terraform modules across networking, security, storage, and compute directories.
+    [x] Layered IaC Parameterization: 100% parameterised Terraform modules across networking, security, storage, and compute directories.
 
     [x] Passwordless RBAC Integration: Implemented azure-identity (DefaultAzureCredential) for storage access across application microservices.
 
     [x] AIOps ML Engine: Integrated IsolationForest anomaly detection and Prophet time-series load forecasting.
 
-    [x] Self-Hosted Runner Security: Re-provisioned Linux Jumpbox VM with full toolbelt and configured read-only terraform plan CI/CD safety gates.
+    [x] Self-Hosted Runner Security: Re-provisioned Linux Jumpbox VM with full tool-belt and configured read-only terraform plan CI/CD safety gates.
 
     [ ] Hub-and-Spoke Topology: Transition single VNet deployment into an enterprise Hub-and-Spoke network architecture with Azure Firewall & VNet Peering.
 
-    [ ] Policy as Code & Governance: Implement Azure Policy / OPA rules to enforce network isolation and security compliance automatically.
+    [ ] Policy as Code & Governance: Implement Azure Policy rules to enforce network isolation and security compliance automatically.
 
-    [ ] Automated Jumpbox Provisioning: Codify Jumpbox toolbelt bootstrap scripts to enable 100% automated VM regeneration.
+    [ ] Automated Jumpbox Provisioning: Create scripts for Jumpbox tool-belt to enable 100% automated VM regeneration.
