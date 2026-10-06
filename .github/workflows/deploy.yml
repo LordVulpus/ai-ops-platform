@@ -85,6 +85,7 @@ jobs:
          # 2. Query Azure to see if the cluster is currently stopped
          CLUSTER_STATE=$(az aks show --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME --query "powerState.code" -o tsv)
          echo "Current cluster state is: $CLUSTER_STATE"
+         echo "STARTING_STATE=$CLUSTER_STATE" >> $GITHUB_ENV
 
          # 3. If it's stopped, wake it up automatically so we can deploy to it
          if [ "$CLUSTER_STATE" = "Stopped" ]; then
@@ -101,6 +102,7 @@ jobs:
 
      # OPTIONAL: Turn it back off immediately after deployment to save costs!
      - name: Power Down Cluster (Cost Savings)
+       if: env.STARTING_STATE == 'Stopped'
        run: |
-         echo " Application deployment complete. Powering down AKS to save money..."
+         echo " Cluster was originally offline. Powering down AKS to save money..."
          az aks stop --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
