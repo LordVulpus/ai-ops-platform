@@ -12,6 +12,10 @@ from prometheus_client import Counter, Histogram, Gauge
 from azure.storage.blob import BlobServiceClient
 from azure.identity import DefaultAzureCredential
 
+# Setup Logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 #Azure Storage Config
 STORAGE_ACCOUNT_URL = "https://windows.net"
 CONTAINER_NAME = "jfaiopsblob"
@@ -41,9 +45,6 @@ except Exception as e:
 
 # Add telemetry history
 telemetry_history = []
-# Setup Logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 # Initialise ML Model
 model = IsolationForest(contamination=0.2)
