@@ -1,6 +1,6 @@
 # Cloud-Native Azure AIOps & ML Telemetry Platform
 
-An enterprise-grade Azure infrastructure and containerized AIOps platform built using Infrastructure as Code (Terraform), Kubernetes (AKS), and GitHub Actions. Features a Python-based ML microservice performing real-time request anomaly detection using passwordless Azure Managed Identity authentication.
+An enterprise-grade Azure infrastructure and containerised AIOps platform built using Infrastructure as Code (Terraform), Kubernetes (AKS), and GitHub Actions. Features a Python-based ML microservice performing real-time request anomaly detection using passwordless Azure Managed Identity authentication.
 
 ---
 
@@ -36,7 +36,7 @@ graph TD
 
     Networking: Single Virtual Network (VNet) hosting AKS cluster and Linux Jumpbox VM (Transition to enterprise Hub-and-Spoke VNet Peering in progress).
 
-    Infrastructure as Code: Fully parameterized, layered Terraform directory architecture (1-networking, 2-security, 3-storage, 4-compute (and AKS subdirectory)).
+    Infrastructure as Code: Fully parameterised, layered Terraform directory architecture (1-networking, 2-security, 3-storage, 4-compute (and AKS subdirectory)).
 
     Container Orchestration: Azure Kubernetes Service (aiops-cluster) & Azure Container Registry (aiopsregistry15069).
 
@@ -88,7 +88,7 @@ graph TD
 
 ## Implementation Status & Roadmap
 
-    [x] Layered IaC Parameterization: 100% parameterised Terraform modules across networking, security, storage, and compute directories.
+    [x] Layered IaC Parameterisation: 100% parameterised Terraform modules across networking, security, storage, and compute directories.
 
     [x] Passwordless RBAC Integration: Implemented azure-identity (DefaultAzureCredential) for storage access across application microservices.
 
